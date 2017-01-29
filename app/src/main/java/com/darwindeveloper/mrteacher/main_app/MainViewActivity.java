@@ -1,13 +1,11 @@
 package com.darwindeveloper.mrteacher.main_app;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,9 +21,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.darwindeveloper.mrteacher.R;
+import com.darwindeveloper.mrteacher.main_app.fragments.CarrerasFragment;
+import com.darwindeveloper.mrteacher.main_app.fragments.EventosFragment;
 
 public class MainViewActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -169,7 +168,7 @@ public class MainViewActivity extends AppCompatActivity
             Fragment fragment = null;
             switch (i) {
                 case 0:
-                    fragment = new CursosFragment();
+                    fragment = new CarrerasFragment();
                     break;
 
                 case 1:
@@ -200,7 +199,7 @@ public class MainViewActivity extends AppCompatActivity
 
             switch (position) {
                 case 0:
-                    return "Cursos";
+                    return "Carreras/Cursos";
                 case 1:
                     return "Eventos";
                 case 2:

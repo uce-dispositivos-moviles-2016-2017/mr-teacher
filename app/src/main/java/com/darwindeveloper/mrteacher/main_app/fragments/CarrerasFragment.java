@@ -1,4 +1,4 @@
-package com.darwindeveloper.mrteacher.main_app;
+package com.darwindeveloper.mrteacher.main_app.fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,53 +7,48 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.darwindeveloper.mrteacher.R;
+import com.darwindeveloper.mrteacher.classes.Carrera;
 import com.darwindeveloper.mrteacher.classes.Constants;
-import com.darwindeveloper.mrteacher.classes.Curso;
 import com.darwindeveloper.mrteacher.classes.Universidad;
 import com.darwindeveloper.mrteacher.database.DataBaseHelper;
 import com.darwindeveloper.mrteacher.database.DatabaseManager;
-import com.darwindeveloper.mrteacher.main_app.adapters.CursosAdapter;
+import com.darwindeveloper.mrteacher.main_app.adapters.CarrerasAdapter;
 import com.darwindeveloper.mrteacher.main_app.adapters.SpinnerUniversidadesAdapter;
-import com.darwindeveloper.mrteacher.main_app.dialogs.NuevoCursoDialogActivity;
-
+import com.darwindeveloper.mrteacher.main_app.dialogs.NuevaCarreraDialogActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Created by DARWIN on 26/1/2017.
+ * Created by DARWIN on 29/1/2017.
  */
 
-public class CursosFragment extends Fragment {
+public class CarrerasFragment extends Fragment {
 
 
-    private final int REQUEST_NUEVO_CURSO = 1;
+    private final int REQUEST_NUEVO_CARRERA = 1;
 
 
     private Context context;
     private View rootView;
     LinearLayout main_content, no_data;
     private RecyclerView recyclerView;
-    private CursosAdapter cursosAdapter;
+    private CarrerasAdapter mCarrerasAdapter;
 
-    private ArrayList<Curso> cursos = new ArrayList<>();
+    private ArrayList<Carrera> carreraArrayList = new ArrayList<>();
 
 
     private DatabaseManager databaseManager;
@@ -66,13 +61,15 @@ public class CursosFragment extends Fragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
 
-        DataBaseHelper dataBaseHelper = new DataBaseHelper(context);
+        DataBaseHelper dataBaseHelper = null;
         try {
-            dataBaseHelper.createDataBase();
+            dataBaseHelper = new DataBaseHelper(context);
         } catch (IOException e) {
-            Log.e("error CF", e.getMessage());
+            e.printStackTrace();
         }
 
+
+        // Log.i("DB NAME", dataBaseHelper.getDatabaseName());
         databaseManager = new DatabaseManager(context, dataBaseHelper.getWritableDatabase());
 
     }
@@ -80,18 +77,18 @@ public class CursosFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_cursos, container, false);
+        rootView = inflater.inflate(R.layout.fragment_carreras, container, false);
 
 
-        main_content=(LinearLayout)rootView.findViewById(R.id.main_content);
-        no_data=(LinearLayout)rootView.findViewById(R.id.no_data);
+        main_content = (LinearLayout) rootView.findViewById(R.id.main_content);
+        no_data = (LinearLayout) rootView.findViewById(R.id.no_data);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewCursos);
         spinner = (Spinner) rootView.findViewById(R.id.spinner);
-        cursosAdapter = new CursosAdapter(context, cursos);
+        mCarrerasAdapter = new CarrerasAdapter(context, carreraArrayList);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-        recyclerView.setAdapter(cursosAdapter);
+        recyclerView.setAdapter(mCarrerasAdapter);
 
         ImageButton fab = (ImageButton) rootView.findViewById(R.id.btn_new);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -109,8 +106,8 @@ public class CursosFragment extends Fragment {
                     });
                     mBuilder.create().show();
                 } else {
-                    Intent intent = new Intent(context, NuevoCursoDialogActivity.class);
-                    startActivityForResult(intent, REQUEST_NUEVO_CURSO);
+                    Intent intent = new Intent(context, NuevaCarreraDialogActivity.class);
+                    startActivityForResult(intent, REQUEST_NUEVO_CARRERA);
                 }
 
             }
@@ -129,13 +126,13 @@ public class CursosFragment extends Fragment {
         new LoadUniversidades("select * from " + Constants.TABLA_INSTITUCIONES_EDUCATIVAS, null).execute();
     }
 
-    private class LoadCursos extends AsyncTask<Void, Void, Void> {
+    private class LoadCarreras extends AsyncTask<Void, Void, Void> {
 
 
         private String query;
         private String[] selectionArgs;
 
-        public LoadCursos(String query, String[] selectionArgs) {
+        public LoadCarreras(String query, String[] selectionArgs) {
             this.query = query;
             this.selectionArgs = selectionArgs;
         }
@@ -145,28 +142,28 @@ public class CursosFragment extends Fragment {
         protected void onPreExecute() {
             main_content.setVisibility(View.GONE);
             no_data.setVisibility(View.VISIBLE);
-            int tmp = cursos.size();
+            int tmp = carreraArrayList.size();
             if (tmp > 0) {
-                cursos.clear();
-                cursosAdapter.notifyItemRangeRemoved(0, tmp - 1);
-                cursosAdapter.notifyDataSetChanged();
+                carreraArrayList.clear();
+                mCarrerasAdapter.notifyItemRangeRemoved(0, tmp - 1);
+                mCarrerasAdapter.notifyDataSetChanged();
             }
 
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            cursos.addAll(databaseManager.getCursos(query, selectionArgs));
+            carreraArrayList.addAll(databaseManager.getCarreras(query, selectionArgs));
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if (cursos.size() > 0) {
+            if (carreraArrayList.size() > 0) {
                 no_data.setVisibility(View.GONE);
                 main_content.setVisibility(View.VISIBLE);
-                cursosAdapter.notifyItemRangeInserted(0, cursos.size() - 1);
-                cursosAdapter.notifyDataSetChanged();
+                mCarrerasAdapter.notifyItemRangeInserted(0, carreraArrayList.size() - 1);
+                mCarrerasAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -175,11 +172,11 @@ public class CursosFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUEST_NUEVO_CURSO) {
+        if (requestCode == REQUEST_NUEVO_CARRERA) {
             if (resultCode == Activity.RESULT_OK) {
 
                 String selectionArgs[] = {universidad_id + ""};
-                new LoadCursos("select * from " + Constants.TABLA_CURSOS + " where institucion_id = ?", selectionArgs).execute();
+                new LoadCarreras("select * from " + Constants.TABLA_CARRERAS + " where institucion_id = ?", selectionArgs).execute();
             }
         }
     }
@@ -237,7 +234,7 @@ public class CursosFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 universidad_id = universidades.get(position).getId();
                 String[] selectionArgs = {universidad_id + ""};//para la condicion where del query
-                new LoadCursos("select * from " + Constants.TABLA_CURSOS + " where institucion_id = ?", selectionArgs).execute();
+                new LoadCarreras("select * from " + Constants.TABLA_CARRERAS + " where institucion_id = ?", selectionArgs).execute();
             }
 
             @Override

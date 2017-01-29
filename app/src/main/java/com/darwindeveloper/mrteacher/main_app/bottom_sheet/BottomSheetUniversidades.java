@@ -169,12 +169,13 @@ public class BottomSheetUniversidades extends BottomSheetDialogFragment {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataBaseHelper dataBaseHelper = new DataBaseHelper(activity);
+                DataBaseHelper dataBaseHelper = null;
                 try {
-                    dataBaseHelper.createDataBase();
+                    dataBaseHelper = new DataBaseHelper(activity);
                 } catch (IOException e) {
-                    Log.e("error CF", e.getMessage());
+                    e.printStackTrace();
                 }
+
 
                 DatabaseManager databaseManager = new DatabaseManager(activity, dataBaseHelper.getWritableDatabase());
 

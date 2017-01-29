@@ -10,6 +10,8 @@ import android.util.Log;
 import com.darwindeveloper.mrteacher.classes.Constants;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by DARWIN on 20/1/2017.
@@ -27,25 +29,37 @@ public class DataBaseContext extends ContextWrapper {
     @Override
     public File getDatabasePath(String name) {
 
-        File sdcard = Environment.getExternalStorageDirectory();
-        String dbfile = sdcard.getAbsolutePath() + "/" + Constants.APP_NAME + "/databases/" + name;
+        File file = null;
+        try {
+            File sdcard = Environment.getExternalStorageDirectory();
+            String dbfile = sdcard.getAbsolutePath() + "/" + Constants.APP_NAME + "/databases/MrTeacher.db";
 
-        if (!dbfile.endsWith(".db")) {
-            dbfile += ".db";
+
+            if (!dbfile.endsWith(".db")) {
+                dbfile += ".db";
+            }
+
+            file = new File(dbfile);
+
+            if (file.exists()) {//si el archivo ya existe lo elimina
+                file.delete();
+            }
+
+            file.createNewFile();
+            FileOutputStream out = new FileOutputStream(file);
+
+            out.flush();
+            out.close();
+
+            if (Log.isLoggable(DEBUG_CONTEXT, Log.WARN)) {
+                Log.w(DEBUG_CONTEXT,
+                        "getDatabasePath(" + name + ") = " + file.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            Log.e("ERROR DBC", e.getMessage());
         }
 
-        File result = new File(dbfile);
-
-        if (!result.getParentFile().exists()) {
-            result.getParentFile().mkdirs();
-        }
-
-        if (Log.isLoggable(DEBUG_CONTEXT, Log.WARN)) {
-            Log.w(DEBUG_CONTEXT,
-                    "getDatabasePath(" + name + ") = " + result.getAbsolutePath());
-        }
-
-        return result;
+        return file;
     }
 
     @Override
@@ -61,7 +75,7 @@ public class DataBaseContext extends ContextWrapper {
 
 
     private void checkFolder() {
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), Constants.APP_NAME+"/databases");
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), Constants.APP_NAME + "/databases");
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 Log.d("MyCameraApp", "failed to create directory");

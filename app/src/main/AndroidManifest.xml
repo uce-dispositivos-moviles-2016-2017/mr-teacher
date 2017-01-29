@@ -41,9 +41,7 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".main_app.dialogs.NuevoCursoDialogActivity"
-            android:theme="@style/DialogAppTheme" />
+
         <activity
             android:name=".main_app.UniversidadesActivity"
             android:configChanges="orientation|screenSize"
@@ -52,7 +50,17 @@
         <activity
             android:name=".main_app.dialogs.NuevaUniversidadDialogActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/DialogAppTheme"></activity>
+            android:theme="@style/DialogAppTheme">
+
+        </activity>
+
+
+        <activity
+            android:name=".main_app.dialogs.NuevaCarreraDialogActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/DialogAppTheme">
+
+        </activity>
     </application>
 
 </manifest>

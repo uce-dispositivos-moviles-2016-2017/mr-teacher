@@ -1,4 +1,4 @@
-package com.darwindeveloper.mrteacher.main_app;
+package com.darwindeveloper.mrteacher.main_app.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;

@@ -5,8 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.darwindeveloper.mrteacher.classes.Carrera;
 import com.darwindeveloper.mrteacher.classes.Constants;
-import com.darwindeveloper.mrteacher.classes.Curso;
 import com.darwindeveloper.mrteacher.classes.Estudiante;
 import com.darwindeveloper.mrteacher.classes.Universidad;
 
@@ -49,79 +49,19 @@ public class DatabaseManager {
     }
 
 
-    public ArrayList<Curso> todos_los_cursos() {
-
-        ArrayList<Curso> list_cursos = new ArrayList<>();
-
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + Constants.TABLA_CURSOS, null);
-
-        if (cursor == null) return null;
 
 
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            do {
-                String id = cursor.getString(cursor.getColumnIndex("curso_id"));
-                String nombre = cursor.getString(cursor.getColumnIndex("nombre"));
-                String paralelo = cursor.getString(cursor.getColumnIndex("paralelo"));
-                String descripcion = cursor.getString(cursor.getColumnIndex("descripcion"));
-                list_cursos.add(new Curso(Integer.parseInt(id), nombre, paralelo, descripcion));
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-
-        return list_cursos;
-
-    }
 
 
-    /**
-     * retorna todos los cursos segun el query y las condiciones deseadas
-     *
-     * @param jquery        ejemplo "select * from users where id=? and name=?"
-     * @param selectionArgs ejemploe {"1","darwin"}
-     * @return
-     */
-    public ArrayList<Curso> getCursos(String jquery, String[] selectionArgs) {
-
-        ArrayList<Curso> list_cursos = new ArrayList<>();
-
-        Cursor cursor = sqLiteDatabase.rawQuery(jquery, selectionArgs);
-
-        if (cursor == null) return null;
-
-
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            do {
-                Long id = cursor.getLong(cursor.getColumnIndex("curso_id"));
-                Long uid = cursor.getLong(cursor.getColumnIndex("institucion_id"));
-                String nombre = cursor.getString(cursor.getColumnIndex("nombre"));
-                String paralelo = cursor.getString(cursor.getColumnIndex("paralelo"));
-                String descripcion = cursor.getString(cursor.getColumnIndex("descripcion"));
-                list_cursos.add(new Curso(id, uid, nombre, paralelo, descripcion));
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-
-        return list_cursos;
-
-    }
-
-
-    public long insertNuevoCurso(String nombre, String paralelo, Long universidad_id, String observaciones) {
+    public long insertNuevaCarrera(String nombre, int universidad_id) {
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put("nombre", nombre);
-        values.put("paralelo", paralelo);
         values.put("institucion_id", universidad_id);
-        values.put("descripcion", observaciones);
         //values.put(ChatContract.ChatsEntry.DATE_TIME, getDateTime());
 
         // Insert the new row, returning the primary key value of the new row
-        return sqLiteDatabase.insert(Constants.TABLA_CURSOS, null, values);
+        return sqLiteDatabase.insert(Constants.TABLA_CARRERAS, null, values);
 
     }
 
@@ -189,6 +129,32 @@ public class DatabaseManager {
         String bingArgs[] = {id + ""};
         String sql = "delete from " + Constants.TABLA_INSTITUCIONES_EDUCATIVAS + " where institucion_id=?";
         sqLiteDatabase.execSQL(sql, bingArgs);
+    }
+
+
+    public ArrayList<Carrera> getCarreras(String jquery, String[] selectionArgs) {
+
+        ArrayList<Carrera> carreraArrayList = new ArrayList<>();
+
+        Cursor cursor = sqLiteDatabase.rawQuery(jquery, selectionArgs);
+
+        if (cursor == null) return null;
+
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex("carrera_id"));
+                int uid = cursor.getInt(cursor.getColumnIndex("institucion_id"));
+                String nombre = cursor.getString(cursor.getColumnIndex("nombre"));
+                carreraArrayList.add(new Carrera(id, nombre, uid));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return carreraArrayList;
+
     }
 
 }

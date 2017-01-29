@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="Nuevo Curso"
+        android:text="Nueva Carrera o Curso"
         android:textSize="22sp"
         android:textStyle="bold" />
 
@@ -18,16 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Nombre del curso"
+        android:hint="Nombre de la carrera o curso"
         android:inputType="text" />
 
-    <EditText
-        android:id="@+id/editText_df_paralelo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Paralelo"
-        android:inputType="text" />
+
 
     <TextView
         android:id="@+id/textView7"
@@ -41,14 +35,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp" />
-
-    <EditText
-        android:id="@+id/editText_df_obsv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Observaciones"
-        android:inputType="textMultiLine" />
 
     <LinearLayout
         android:layout_width="match_parent"

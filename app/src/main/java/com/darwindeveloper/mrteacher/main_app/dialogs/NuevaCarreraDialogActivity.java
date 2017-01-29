@@ -3,9 +3,8 @@ package com.darwindeveloper.mrteacher.main_app.dialogs;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -23,21 +22,25 @@ import com.darwindeveloper.mrteacher.main_app.adapters.SpinnerUniversidadesAdapt
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class NuevoCursoDialogActivity extends AppCompatActivity {
+/**
+ * Created by DARWIN on 29/1/2017.
+ */
 
-    public static final String U_ID = "com.darwindeveloper.mrteacher.NUEVO_CURSO.uid";
+public class NuevaCarreraDialogActivity extends AppCompatActivity {
+
+    public static final String U_ID = "com.darwindeveloper.mrteacher.NUEVA_CARRERA.uid";
 
     private DatabaseManager databaseManager;
     private Context context;
     private ArrayList<Universidad> universidades = new ArrayList<>();
     private Spinner spinner;
-    private long universidad_id = -1;
+    private int universidad_id = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nuevo_curso_dialog);
-        context = NuevoCursoDialogActivity.this;
+        setContentView(R.layout.activity_nueva_carrera);
+        context = NuevaCarreraDialogActivity.this;
 
         View mDecorView = getWindow().getDecorView();
         // Set the IMMERSIVE flag.
@@ -50,12 +53,13 @@ public class NuevoCursoDialogActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                 | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
-        DataBaseHelper dataBaseHelper = new DataBaseHelper(context);
+        DataBaseHelper dataBaseHelper = null;
         try {
-            dataBaseHelper.createDataBase();
+            dataBaseHelper = new DataBaseHelper(context);
         } catch (IOException e) {
-            Log.e("error CF", e.getMessage());
+            e.printStackTrace();
         }
+
 
         databaseManager = new DatabaseManager(context, dataBaseHelper.getWritableDatabase());
 
@@ -65,8 +69,7 @@ public class NuevoCursoDialogActivity extends AppCompatActivity {
 
 
         final EditText editTextNombre = (EditText) findViewById(R.id.editText_df_nombre);
-        final EditText paralelo = (EditText) findViewById(R.id.editText_df_paralelo);
-        final EditText observaciones = (EditText) findViewById(R.id.editText_df_obsv);
+
         // Fetch arguments from bundle and set title
 
 
@@ -78,12 +81,11 @@ public class NuevoCursoDialogActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final String nombre_ = editTextNombre.getText().toString();
-                final String paralelo_ = paralelo.getText().toString();
-                final String obs = observaciones.getText().toString();
+
                 if (nombre_.trim().length() == 0) {
                     Toast.makeText(context, "Debe ingresar un nombre valido ", Toast.LENGTH_SHORT).show();
                 } else {
-                    nuevoCurso(nombre_, paralelo_, obs);
+                    nuevaCarrera(nombre_);
                 }
 
             }
@@ -98,11 +100,11 @@ public class NuevoCursoDialogActivity extends AppCompatActivity {
     }
 
 
-    private void nuevoCurso(String nombre, String paralelo, String observaciones) {
-        Long id = databaseManager.insertNuevoCurso(nombre, paralelo, universidad_id, observaciones);
+    private void nuevaCarrera(String nombre) {
+        Long id = databaseManager.insertNuevaCarrera(nombre,universidad_id);
         if (id != -1) {
 
-            Toast.makeText(context, "Curso creado", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Creado con exito", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
             intent.putExtra(U_ID, universidad_id);
             setResult(RESULT_OK, intent);

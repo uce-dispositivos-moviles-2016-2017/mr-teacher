@@ -43,12 +43,13 @@ public class NuevaUniversidadDialogActivity extends AppCompatActivity {
 
         context = this;
 
-        DataBaseHelper dataBaseHelper = new DataBaseHelper(context);
+        DataBaseHelper dataBaseHelper = null;
         try {
-            dataBaseHelper.createDataBase();
+            dataBaseHelper = new DataBaseHelper(context);
         } catch (IOException e) {
-            Log.e("error CF", e.getMessage());
+            e.printStackTrace();
         }
+
         databaseManager = new DatabaseManager(context, dataBaseHelper.getWritableDatabase());
 
 

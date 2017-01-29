@@ -57,12 +57,13 @@ public class UniversidadesActivity extends AppCompatActivity implements Universi
 
         context = UniversidadesActivity.this;
 
-        DataBaseHelper dataBaseHelper = new DataBaseHelper(context);
+        DataBaseHelper dataBaseHelper = null;
         try {
-            dataBaseHelper.createDataBase();
+            dataBaseHelper = new DataBaseHelper(context);
         } catch (IOException e) {
-            Log.e("error CF", e.getMessage());
+            e.printStackTrace();
         }
+
 
         databaseManager = new DatabaseManager(context, dataBaseHelper.getWritableDatabase());
 

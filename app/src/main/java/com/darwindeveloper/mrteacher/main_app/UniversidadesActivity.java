@@ -189,6 +189,7 @@ public class UniversidadesActivity extends AppCompatActivity implements Universi
                 universidades.remove(posicion);
                 mAdapter.notifyItemRemoved(posicion);
                 mAdapter.notifyDataSetChanged();
+                Toast.makeText(context, "Eliminado", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {

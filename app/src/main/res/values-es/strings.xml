@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Sr. Profesor</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="prompt_vpassword">Verificación Contraseña</string>
+    <string name="names">Tus Nombres</string>
+    <string name="last_names">tus Apellidos</string>
+    <string name="login_title">Ingresar a tu cuenta</string>
+    <string name="forgot_password">Olvido su contraseña?</string>
+    <string name="action_sign_in">Iniciar Sesión</string>
+    <string name="action_sign_in_short">Ingresar</string>
+    <string name="error_invalid_email">El email ingresado es invalido</string>
+    <string name="error_invalid_password">La contraseña es demasiado corta</string>
+    <string name="cargando">Cargando, por favor espere...</string>
+    <string name="error_equals_password">Las contraseñas no son iguales</string>
+    <string name="error_incorrect_password">Contraseña Incorrecta</string>
+    <string name="error_field_required">Este campo es obligatorio</string>
+    <string name="permission_rationale">"Se necesitan permisos de contactos para proporcionar correo electrónico
+        Terminaciones"
+    </string>
+    <string name="text_remember">Mantener sesión abierta </string>
+    <string name="title_register">Nueva cuenta</string>
+    <string name="subtitle_register">Por seguridad para ingresar a la aplicacion es necesario crear una cuenta de ingreso</string>
+    <string name="create_account">Crear tu Cuenta</string>
+    <string name="internet_access_to_register">(Solo por esta vez) "Acceso a internet necesario" para recuperar tu contraseña o realizar tus copias de seguridad</string>
+
+
+    <!--Register Activity-->
+    <string name="error_internet">ERROR DE CONECTIVIDAD</string>
+    <string name="register_error_internet">Para crear tu cuenta es necesario una coneccion a internet, despues podras usar la aplicacion sin internet</string>
+
+</resources>
